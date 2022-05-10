@@ -4,10 +4,20 @@
 class HeapSort():
 
 
-    def __init__(self):
+    def __init__(self, input_dict):
 
         self.name = "Heap Sort"
-        self.execution_time = dict()
+
+        self.execution_time = {"best": {},
+                               "worst": {},
+                               "avg": {}}
+
+        self.best_case_inputs = input_dict['same']
+        self.worst_case_inputs = input_dict['sorted']
+        self.avg_case_inputs = input_dict['random']
+
+
+
 
     def heapify(self, unsorted_list, size, index):
         largest = index

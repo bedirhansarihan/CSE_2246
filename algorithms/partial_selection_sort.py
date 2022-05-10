@@ -1,14 +1,16 @@
 
 
-
 class PartialSelectionSort():
 
-    def __init__(self):
-
+    def __init__(self, array_list):
         self.name = "Partial Selection Sort"
-        self.execution_time = dict()
+        self.execution_time = {"best": {},
+                               "worst": {},
+                               "avg": {}}
 
-
+        self.best_case_inputs = []
+        self.worst_case_inputs = []
+        self.avg_case_inputs = []
 
     def sort_algorithm(self, unsorted_list, k):
         size = len(unsorted_list)

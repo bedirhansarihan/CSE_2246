@@ -1,5 +1,5 @@
 import typing
-import random
+
 from chart import Chart
 
 from algorithms.insertion_sort import InsertionSort
@@ -8,70 +8,109 @@ from algorithms.quick_sort import QuickSort
 from algorithms.partial_selection_sort import PartialSelectionSort
 from algorithms.heap_sort import HeapSort
 
+from generate_input import *
 import time
 class Analysis:
 
-    def __init__(self, algorithms: list):
+    def __init__(self,):
 
+        self.inputs: typing.Dict[str, typing.List[list]] = self.create_random_inputs()
 
+        self.k= self.create_random_k()
 
-        self.insertion_sort = algorithms[0]             # 1
-        self.merge_sort = algorithms[1]                 # 2
-        self.quick_sort = algorithms[2]                 # 3
-        self.partial_selection_sort = algorithms[2]     # 4
-        self.heap_sort = algorithms[3]                  # 5
-        # self.quick_select1 = algorithms[5]              # 6
-        # self.quick_select2 = algorithms[6]              # 7
-        self.algorithm_list = [self.insertion_sort, self.merge_sort, self.partial_selection_sort, self.heap_sort]
+        self.quick_sort = QuickSort(self.inputs)
+        self.insertion_sort = InsertionSort(self.inputs)
+        self.merge_sort = MergeSort(self.inputs)
+        self.partial_selection_sort = PartialSelectionSort(self.inputs)
+        self.heap_sort = HeapSort(self.inputs)
+        # self.quick_select1 = algorithms[5]
+        # self.quick_select2 = algorithms[6]
+
+        self.algorithm_list = [self.quick_sort, self.insertion_sort, self.merge_sort,  self.partial_selection_sort, self.heap_sort]
         self.chart = Chart(self.algorithm_list)
-
-        self.inputs: dict = self.create_valid_inputs()
-        self.k: list = self.create_valid_k()
 
 
         self.execute()
         self.chart.execute()
 
-    def create_valid_inputs(self) -> typing.Dict[int, typing.List[int]]:
+    def create_random_inputs(self) -> typing.Dict[str, typing.List[list]]:
+        """
+        In order to test algorithm efficiency, it creates different lists with different sizes.
+        :return:
+        """
         input_dict = {}
-        input_size = 500
 
+        input_dict['random'] = random_input([1000,10000, 20000,30000,40000,50000])
+        input_dict['sorted'] = sorted_input(input_dict['random'])
+        input_dict['reversed_sorted'] = reversed_sorted_input(input_dict['sorted'])
+        input_dict['same'] = same_input(input_dict['random'])
 
-        for i in range(4):
-            input_dict[input_size] = random.sample(range(1, 500000), input_size)
-            input_size *= 2
+        data = []
+        for list in input_dict['sorted']:
+            x = list.copy()
+            permutated_input(x, 0, len(x) -1)
+            data.append(x)
+
+        input_dict['permutated'] = data
 
         return input_dict
 
-    def create_valid_k(self) -> typing.List[int]:
+
+    def create_random_k(self) -> typing.List[int]:
+        """
+        Generates a random k value that algorithms will return after sorting the lists.
+        :return:
+        """
         random_k_list = []
 
-        for input_size in self.inputs.keys():
-            random_k_list.append(random.randint(0, input_size))
+        for input_size in list(self.inputs.values())[0]:
+            random_k_list.append(random.randint(0, len(input_size)-1))
 
         return random_k_list
 
 
+    def analyze_algorithms(self, algo: typing.Union[QuickSort, InsertionSort, MergeSort,  PartialSelectionSort, HeapSort]):
+        """
+        Calculates the execution time with different input size for each algorithms
 
+        :param algo:
+        :return:
+        """
 
-    def analyze_algorithms(self, algo: typing.Union[InsertionSort, MergeSort, QuickSort, PartialSelectionSort, HeapSort]):
+        for i, l in enumerate(list(self.inputs.values())[0]):
+        # avg_case
+            input_size = len(l)
+            start_time = time.time() * 1000
 
-        list_dict: dict = self.inputs
-        for i, (input_size, list) in enumerate(list_dict.items()):
+            algo.sort_algorithm(algo.avg_case_inputs[i], self.k[i])
+            algo.execution_time["avg"][input_size] = round(time.time() * 1000 - start_time, 4)
+            print(f"avg_case for {algo.name} algortihms:->> {algo.execution_time['avg'][input_size]}")
 
-            start_time = time.time()
+        # best_case
 
-            print(algo.sort_algorithm(list, self.k[i])
-                  )
+            start_time = time.time() * 1000
+            algo.sort_algorithm(algo.best_case_inputs[i], self.k[i])
+            algo.execution_time['best'][input_size] =round(time.time() * 1000 - start_time, 4)
+            print(f"best_case for {algo.name} algortihms:->> {algo.execution_time['best'][input_size]}")
 
-            algo.execution_time[input_size] = time.time() - start_time
+        # worst_case
 
-
+            start_time = time.time() * 1000
+            algo.sort_algorithm(algo.worst_case_inputs[i], self.k[i])
+            algo.execution_time['worst'][input_size] = round(time.time() * 1000 - start_time, 4)
+            print(f"worst_case for {algo.name} algortihms:->> {algo.execution_time['worst'][input_size]}")
+            print(f'FOR N IS {input_size}\n')
     def execute(self):
-        #calculates the execution time with different input_size for each algorithms
+        print('start')
+        start_exec_time = time.time()
         for algo in self.algorithm_list:
+            if algo.name in ["Partial Selection Sort","Quick Sort", "Insertion Sort"]:
+                continue
 
             self.analyze_algorithms(algo)
+
+        total_exec_time = time.time() -start_exec_time
+        print(total_exec_time)
 
 
 

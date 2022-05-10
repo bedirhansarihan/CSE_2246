@@ -1,14 +1,20 @@
 import random
 import sys
 
-
 class QuickSort():
 
 
-    def __init__(self):
-
+    def __init__(self, input_dict):
         self.name = "Quick Sort"
-        self.execution_time = dict()
+
+        self.execution_time = {"best": {},
+                               "worst": {},
+                               "avg": {}}
+
+        self.best_case_inputs = input_dict['same']
+        self.worst_case_inputs = input_dict['sorted']
+        self.avg_case_inputs = input_dict['random']
+
     def quicksort_partition(self, unsorted_list, low, high):
         partitioning_index = low - 1
         pivot = unsorted_list[high]
@@ -31,6 +37,5 @@ class QuickSort():
             self.sort_algorithm(unsorted_list, None, low, partitioning_index - 1)
             self.sort_algorithm(unsorted_list, None, partitioning_index + 1, high)
         if k is not None:
-            print("x")
             return unsorted_list[k]
 

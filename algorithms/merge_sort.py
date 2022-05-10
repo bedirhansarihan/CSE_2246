@@ -1,11 +1,23 @@
 import time
 import random
+import typing
 
-class MergeSort:
+class MergeSort():
 
-    def __init__(self):
+    def __init__(self, input_dict):
+
         self.name = "Merge Sort"
-        self.execution_time = dict()
+        self.execution_time = {"best": {},
+                               "worst": {},
+                               "avg": {}}
+
+
+        self.best_case_inputs = input_dict['sorted']
+        self.worst_case_inputs = input_dict['permutated']
+        self.avg_case_inputs = input_dict['random']
+
+
+
 
     def sort_algorithm(self, array, k=0):
 
