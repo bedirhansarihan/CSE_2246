@@ -8,7 +8,7 @@ from analysis import Analysis
 
 if __name__ == '__main__':
     # instances of algorithms
-    sys.setrecursionlimit(9999)
+    sys.setrecursionlimit(4500)
     
     # analysis part
     analysis = Analysis()

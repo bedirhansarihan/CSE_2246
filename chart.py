@@ -48,6 +48,11 @@ class Chart():
 
 
     def best_worst_avg_case(self, algo: typing.Union[QuickSort, InsertionSort, MergeSort, PartialSelectionSort, HeapSort]):
+        """
+        According to algorithms' data, it creates line chart based on best_worst_avg case
+        :param algo:
+        :return:
+        """
         data: dict = algo.execution_time
         fig, ax = plt.subplots(figsize=(12, 6), layout='constrained')
         for case in data:
@@ -80,6 +85,11 @@ class Chart():
         plt.show()
 
     def table(self, algo: typing.Union[QuickSort, InsertionSort, MergeSort, PartialSelectionSort, HeapSort]):
+        """
+        it creates the table chart
+        :param algo:
+        :return:
+        """
 
 
 
@@ -102,10 +112,10 @@ class Chart():
     def execute(self):
 
         for algo in self.algorithms:
-            if algo.name in ["Partial Selection Sort", "Quick Sort", "Insertion Sort"]:
-                continue
-            self.best_worst_avg_case(algo)
-            self.table(algo)
+            if algo.name == "Quick Select v1":
+                self.best_worst_avg_case(algo)
+
+                self.table(algo)
         #
         # for idx1, algo1 in enumerate(self.algorithms):
         #

@@ -1,6 +1,4 @@
-# Python program to generate Worst Case of Merge Sort
 import random
-# Function to join left and right subarray
 import typing
 
 
